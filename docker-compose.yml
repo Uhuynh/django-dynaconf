@@ -1,0 +1,40 @@
+version: '3.7'
+
+services:
+
+  app:
+    image: ${APP_IMAGE}
+    build:
+      context: .
+      args:
+        UID: ${COMPOSE_UID}
+        GID: ${COMPOSE_GID}
+    command: python /opt/project/manage.py runserver 0:8000
+    environment:
+      - DJANGO_ENVIRONMENT=dev
+    volumes:
+      - .:/opt/project
+    ports:
+      - 0.0.0.0:${PORT_DJANGO}:8000
+    depends_on:
+      - postgres
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8000/core/healthcheck" ]
+      interval: 10s
+      timeout: 2s
+      retries: 60
+
+
+  postgres:
+    image: postgres:14.4
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=${DJANGO_DATABASES__default__USER}
+      - POSTGRES_PASSWORD=${DJANGO_DATABASES__default__PASSWORD}
+      - POSTGRES_DB=${DJANGO_DATABASES__default__NAME}
+    ports:
+      - 0.0.0.0:${PORT_POSTGRES}:${DJANGO_DATABASES__default__PORT}
+
+volumes:
+  postgres_data: {}

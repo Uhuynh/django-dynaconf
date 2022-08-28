@@ -1,0 +1,29 @@
+default:
+
+  VERSION: 0.0.18
+
+  DEBUG: False
+  ENVIRONMENT:
+
+  # add our installed apps
+  INSTALLED_APPS:
+    - app.apps.AppConfig
+    - dynaconf_merge  # IMPORTANT
+
+  # use postgres instead of sqlite
+  DATABASES:
+    default:
+      ENGINE: django.db.backends.postgresql
+      HOST: postgres
+      NAME: postgres
+      USER: postgres
+      PASSWORD: postgres
+      PORT: 5432
+
+dev:
+  DEBUG: True
+  SECRET_KEY: SECRET-KEY-FOR-DEV-ENVIRONMENT
+  ALLOWED_HOSTS:
+    - localhost
+    - 127.0.0.1
+    - testserver  # we want to execute tests locally
