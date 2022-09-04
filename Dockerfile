@@ -17,9 +17,13 @@ ARG STATIC_ROOT=/opt/static
 # runtime user
 RUN useradd -l --uid $UID --base-dir /home --create-home --home-dir /home/username username
 
+# environment
+ENV PROJECT_DIR=$PROJECT_DIR \
+    DJANGO_SETTINGS_MODULE=project.settings
+
 # add directories
 RUN mkdir $PROJECT_DIR $STATIC_ROOT && \
-    chown -R username:username $PROJECT_DIR $STATIC_ROOT \
+    chown -R username:username $PROJECT_DIR $STATIC_ROOT
 
 # copy project to project dir and make sure /opt is owned by dje
 COPY --chown=username:username . ${PROJECT_DIR}
