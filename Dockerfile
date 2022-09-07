@@ -15,7 +15,7 @@ ARG PROJECT_DIR=/opt/project
 ARG STATIC_ROOT=/opt/static
 
 # runtime user
-RUN useradd -l --uid $UID --base-dir /home --create-home --home-dir /home/username username
+RUN useradd -l --uid $UID --base-dir /home --create-home --home-dir /home/testuser testuser
 
 # environment
 ENV PROJECT_DIR=$PROJECT_DIR \
@@ -23,17 +23,17 @@ ENV PROJECT_DIR=$PROJECT_DIR \
 
 # add directories
 RUN mkdir $PROJECT_DIR $STATIC_ROOT && \
-    chown -R username:username $PROJECT_DIR $STATIC_ROOT
+    chown -R testuser:testuser $PROJECT_DIR $STATIC_ROOT
 
-# copy project to project dir and make sure /opt is owned by dje
-COPY --chown=username:username . ${PROJECT_DIR}
+# copy project to project dir and make sure /opt is owned by testuser
+COPY --chown=testuser:testuser . ${PROJECT_DIR}
 
 # update pip and install setuptools
 RUN pip config set global.trusted-host "pypi.org files.pythonhosted.org pypi.python.org" &&  \
     pip install -U pip setuptools
 
 # use non priviledged user
-USER username
+USER testuser
 
 # set pip configuration and install requirements
 RUN pip config set global.trusted-host "pypi.org files.pythonhosted.org pypi.python.org" &&  \

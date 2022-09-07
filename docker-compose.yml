@@ -17,7 +17,7 @@ services:
     ports:
       - 0.0.0.0:${PORT_DJANGO}:8000
     depends_on:
-      - postgres
+      - postgres-db
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:8000/core/healthcheck" ]
       interval: 10s
@@ -25,7 +25,7 @@ services:
       retries: 60
 
 
-  postgres:
+  postgres-db:
     image: postgres:14.4
     volumes:
       - postgres_data:/var/lib/postgresql/data
