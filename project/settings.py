@@ -18,19 +18,16 @@ settings = dynaconf.DjangoDynaconf(
     __name__,
     settings_files=[
         'settings.yaml'
-    ],
-    env_switcher='DJANGO_ENVIRONMENT',
-    load_dotenv=True,
+    ],  # the path for the files you wish dynaconf to load the settings from
+    env_switcher='DJANGO_ENVIRONMENT',  # set the variable to switch environment
+    load_dotenv=True,  # if True, dynaconf will try to load the variables from a .env file.
     validators=[
         Validator('ENVIRONMENT', must_exist=True),
-
         Validator('DEBUG', is_type_of=bool),
-        Validator('ENVIRONMENT', is_in=('dev', 'pytest')),
-    ]
+        Validator('ENVIRONMENT', is_in=('dev', 'test')),
+    ]  # A list of validators to be triggered right after the Dynaconf initialization.
 )  # noqa
 
 #
 # HERE ENDS DYNACONF EXTENSION LOAD (No more code below this line)
 #
-
-

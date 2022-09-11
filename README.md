@@ -19,7 +19,7 @@ support for [12-factor applications](https://12factor.net/config) and extensions
 with dynaconf loading hooks
 - The change is done on a single file and then in your whole project every time you call `django.conf.settings`
 you will have access to dynaconf attributes and methods.
-- Instead of defining all of our project settings / variables in Django default `settings.py`:
+- Instead of defining all of our project settings in Django default `settings.py`:
   ````python
   # settings.py
   ...
@@ -27,7 +27,7 @@ you will have access to dynaconf attributes and methods.
   FOO='bar'
   ...
   ````
-  With Dynaconf, we can easily define the variables in `settings.{yaml, toml, ini, json, py}`, which can change
+  With Dynaconf, we can easily define the settings in `settings.{yaml, toml, ini, json, py}`, which can change
 based on the environments, for example `[default]`, `[development]`, and `[production]`
   ````yaml
   # settings.yaml
@@ -45,6 +45,118 @@ based on the environments, for example `[default]`, `[development]`, and `[produ
     foo: bar prod
   ````
 # 3. Setup
+
+## 3.1. Prepare
+- Add `django` and `dynaconf` packages to `requirements.txt`, which will be installed via Docker.
+  ````text
+  # requirements.txt
+  
+  django==4.0.6
+  dynaconf==3.1.9
+  ````
+- Append at the bottom of your Django project's `settings.py` the following code to initialize Dynaconf:
+  ````python
+  # settings.py
+  ...
+  
+  # HERE STARTS DYNACONF EXTENSION LOAD (Keep at the very bottom of settings.py)
+  # Read more at https://www.dynaconf.com/django/
+  import dynaconf  # noqa
+  settings = dynaconf.DjangoDynaconf(__name__)  # noqa
+  # HERE ENDS DYNACONF EXTENSION LOAD (No more code below this line)
+  ````
+- A more advanced Dynaconf initialization can be found in `project/settings.py`. For more
+configuration options, check out [Dynaconf configuration docs](https://www.dynaconf.com/configuration/#load_dotenv).
+  ````python
+  # settings.py
+  ...
+  
+  #
+  # HERE STARTS DYNACONF EXTENSION LOAD
+  #
+  
+  import dynaconf  # noqa
+  from dynaconf import Validator # noqa
+  
+  settings = dynaconf.DjangoDynaconf(
+      __name__,
+      settings_files=[
+          'settings.yaml'
+      ],  # the path for the files you wish dynaconf to load the settings from
+      env_switcher='DJANGO_ENVIRONMENT',  # set the variable to switch environment
+      load_dotenv=True,  # if True, dynaconf will try to load the variables from a .env file.
+      validators=[
+          Validator('ENVIRONMENT', must_exist=True),
+          Validator('DEBUG', is_type_of=bool),
+          Validator('ENVIRONMENT', is_in=('dev', 'test')),
+      ]  # A list of validators to be triggered right after the Dynaconf initialization.
+  )  # noqa
+  
+  #
+  # HERE ENDS DYNACONF EXTENSION LOAD (No more code below this line)
+  #
+  ````
+- We can now define all of Django settings in `project/settings.yaml` across different environment
+  ````yaml
+  default:
+    ENVIRONMENT:
+  
+    SECRET_KEY:
+  
+    ALLOWED_HOSTS: []
+  
+    INSTALLED_APPS:
+      - django.contrib.admin
+      - django.contrib.auth
+      - django.contrib.contenttypes
+      - django.contrib.sessions
+      - django.contrib.messages
+      - django.contrib.staticfiles
+      - app.apps.AppConfig
+    
+    ...
+  
+  dev:
+    SECRET_KEY: DEV-ENVIRONMENT-SECRET-KEY
+  
+  test:
+    SECRET_KEY: TEST-ENVIRONMENT-SECRET-KEY
+  ````
+- It is possible to use environment variables to override parameters defined in `settings` file.
+In our case, we use `.env` file to pass environment variables to our docker container.
+  ````text
+  # .env file
+  
+  DJANGO_DATABASES__default__USER=postgres-user
+  DJANGO_DATABASES__default__PASSWORD=postgres-password
+  DJANGO_DATABASES__default__NAME=postgres
+  DJANGO_DATABASES__default__PORT=5432
+  DJANGO_DATABASES__default__HOST=postgres-db
+  ````
+  Above variables will take precedence over those that are defined in `settings.yaml`:
+  ````yaml
+  default:
+    DATABASES:
+      default:
+        ENGINE: django.db.backends.postgresql
+        HOST: postgres
+        NAME: postgres
+        USER: postgres
+        PASSWORD: postgres
+        PORT: 5432
+  ````
+**Notes**:
+- To access or change Dynaconf via environment variables, we can use the format 
+`${ENVVAR_PREFIX}_${VARIABLE}__${NESTED_ITEM}__${NESTED_ITEM}`. Each `__` (dunder, a.k.a double underline) 
+denotes access to nested elements in a dictionary.
+- `DJANGO_` is used as the global prefix to export environment variables in this project.
+- Django settings is case-sensitive, so `DYNACONF_DATABASES__default__ENGINE` is not the same as 
+`DYNACONF_DATABASES__DEFAULT__ENGINE`
+- `.yaml` is the recommended format for Django applications because it allows complex 
+data structures
+- To use `$ dynaconf` CLI the `DJANGO_SETTINGS_MODULE` environment variable must be defined.
+
+## 3.2. Bring up the project
 - Make sure to install `Docker` and `Docker Compose` on the machine
     ```bash
     $ docker --version

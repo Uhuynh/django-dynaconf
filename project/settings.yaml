@@ -4,13 +4,12 @@ default:
 
   DEBUG: False
 
-  # settings know their environment, this is set when dynaconf is initialized
+  # dynaconf environment switcher, this is set when dynaconf is initialized
   ENVIRONMENT:
 
   # the secret key must be set in each environment
   SECRET_KEY:
 
-  # there is no default set for ALLOWED_HOSTS since this depends on the environment
   ALLOWED_HOSTS: []
 
   # add our installed apps
@@ -22,7 +21,6 @@ default:
     - django.contrib.messages
     - django.contrib.staticfiles
     - app.apps.AppConfig
-#    - dynaconf_merge  # IMPORTANT
 
   MIDDLEWARE:
     - django.middleware.security.SecurityMiddleware
@@ -37,8 +35,7 @@ default:
 
   # standard Django configuration
   TEMPLATES:
-    -
-      BACKEND: django.template.backends.django.DjangoTemplates
+    - BACKEND: django.template.backends.django.DjangoTemplates
       DIRS: [ ]
       APP_DIRS: True
       OPTIONS:
@@ -59,7 +56,6 @@ default:
 
   WSGI_APPLICATION: project.wsgi.application
 
-  # use timezone and english language
   LANGUAGE_CODE: en-us
   TIME_ZONE: UTC
   USE_I18N: True
@@ -70,7 +66,6 @@ default:
   STATIC_URL: /static/
   STATIC_ROOT:
 
-  # use postgres instead of sqlite
   DATABASES:
     default:
       ENGINE: django.db.backends.postgresql
@@ -82,7 +77,14 @@ default:
 
 dev:
   DEBUG: True
-  SECRET_KEY: SECRET-KEY-FOR-DEV-ENVIRONMENT
+  SECRET_KEY: DEV-ENVIRONMENT-SECRET-KEY
+  ALLOWED_HOSTS:
+    - localhost
+    - 127.0.0.1
+
+test:
+  DEBUG: True
+  SECRET_KEY: TEST-ENVIRONMENT-SECRET-KEY
   ALLOWED_HOSTS:
     - localhost
     - 127.0.0.1

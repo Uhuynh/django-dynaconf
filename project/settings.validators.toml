@@ -1,4 +1,0 @@
-[default]
-
-[default.ENVIRONMENT]
-is_in=['dev']
