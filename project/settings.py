@@ -26,7 +26,6 @@ settings = dynaconf.DjangoDynaconf(
 
         Validator('DEBUG', is_type_of=bool),
         Validator('ENVIRONMENT', is_in=('dev', 'pytest')),
-
     ]
 )  # noqa
 
