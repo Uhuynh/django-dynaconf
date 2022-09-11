@@ -25,7 +25,7 @@ support for [12-factor applications](https://12factor.net/config) and extensions
   - Powerful `$ dynaconf CLI` to help you manage your settings via console.
 
 # 2. Dynaconf - Django Extension
-- [Dynaconf extensions for Django](https://www.dynaconf.com/django/) works by patching the `settings.py` file 
+- [Dynaconf extension for Django](https://www.dynaconf.com/django/) works by patching the `settings.py` file 
 with dynaconf loading hooks
 - The change is done on a single file and then in your whole project every time you call `django.conf.settings`
 you will have access to dynaconf attributes and methods.
