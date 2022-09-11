@@ -7,6 +7,7 @@ class IndexView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Django with Dynaconf'
-        context['message'] = '- Version ' + settings.VERSION
+        context['title'] = 'Django with Dynaconf - Version ' + settings.VERSION
+        context['message'] = 'Our SECRET_KEY is ' + settings.SECRET_KEY
+        context['db_user'] = 'Our database user is ' + settings.DATABASES.default.USER
         return context

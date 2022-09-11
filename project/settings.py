@@ -24,7 +24,7 @@ settings = dynaconf.DjangoDynaconf(
     validators=[
         Validator('ENVIRONMENT', must_exist=True),
         Validator('DEBUG', is_type_of=bool),
-        Validator('ENVIRONMENT', is_in=('dev', 'test')),
+        Validator('ENVIRONMENT', is_in=('development', 'testing')),
     ]  # A list of validators to be triggered right after the Dynaconf initialization.
 )  # noqa
 

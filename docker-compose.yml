@@ -11,7 +11,7 @@ services:
         GID: ${COMPOSE_GID}
     command: python /opt/project/manage.py runserver 0:8000
     environment:
-      - DJANGO_ENVIRONMENT=dev
+      - DJANGO_ENVIRONMENT=development
     volumes:
       - .:/opt/project
     ports:

@@ -75,14 +75,14 @@ default:
       PASSWORD: postgres
       PORT: 5432
 
-dev:
+development:
   DEBUG: True
   SECRET_KEY: DEV-ENVIRONMENT-SECRET-KEY
   ALLOWED_HOSTS:
     - localhost
     - 127.0.0.1
 
-test:
+testing:
   DEBUG: True
   SECRET_KEY: TEST-ENVIRONMENT-SECRET-KEY
   ALLOWED_HOSTS:

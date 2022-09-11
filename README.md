@@ -166,7 +166,16 @@ data structures
     ```
 - Clone the repository: https://github.com/Uhuynh/django-dynaconf
 - Run `$ docker-compose up -d`
-- To verify the setup, go to `http://localhost:33000`
+  - This will install required packages and bring up 2 services as defined in `docker-compose.yml`:
+    - `app` is our Django application. Note that our Dynaconf environment switcher 
+    `DJANGO_ENVIRONMENT` has to be defined as environment variable of the container
+    - `postgres-db` is a PostgreSQL database for our Django application. Note how the environment variables 
+    are defined in `environment` section.
+- To verify the setup, go to `http://localhost:33000`. We should see below screen:
+![home-page][homepage]
+  - `SECRET_KEY` value is loaded from our `project/settings.yaml` under `[development]` environment
+  - Database user is loaded from ``DJANGO_DATABASES__default__USER`` as defined in `.env` file, and not from
+  [default] environment of ``project/settings.yaml``.
 
 # 4. Clean up
 To clean up your environment (containers, volumes) run:
@@ -177,3 +186,4 @@ $ docker system prune
 **Notes**:
 - this will purge your volumes and all data
 
+[homepage]: markdown/home.png
