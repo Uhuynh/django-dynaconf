@@ -1,6 +1,16 @@
 # django-dynaconf
 A simple Django app with Dynaconf integrated. The setup is based on Docker Compose.
 
+---
+## Table of contents
+
+1. [What is Dynaconf?](#1-what-is-dynaconf)
+2. [Dynaconf - Django Extension](#2-dynaconf---django-extension)
+3. [Setup](#3-setup)  
+  3.1. [Initialize Dynaconf](#31-initialize-dynaconf)  
+  3.2. [Bring up the project](#32-bring-up-the-project)
+4. [Clean up](#4-clean-up)
+---
 
 # 1. What is Dynaconf?
 - [Dynaconf](https://www.dynaconf.com/) is a layered configuration system for Python applications - with strong 
@@ -46,7 +56,7 @@ based on the environments, for example `[default]`, `[development]`, and `[produ
   ````
 # 3. Setup
 
-## 3.1. Prepare
+## 3.1. Initialize Dynaconf
 - Add `django` and `dynaconf` packages to `requirements.txt`, which will be installed via Docker.
   ````text
   # requirements.txt
