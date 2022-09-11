@@ -182,10 +182,11 @@ data structures
     - `postgres-db` is a PostgreSQL database for our Django application. Note how the environment variables 
     are defined in `environment` section.
 - To verify the setup, go to `http://localhost:33000`. We should see below screen:
-![home-page][homepage]
+
+  ![home-page][homepage]
   - `SECRET_KEY` value is loaded from our `project/settings.yaml` under `[development]` environment
   - Database user is loaded from ``DJANGO_DATABASES__default__USER`` as defined in `.env` file, and not from
-  [default] environment of ``project/settings.yaml``.
+  `[default]` environment section of ``project/settings.yaml``.
 
 # 4. Clean up
 To clean up your environment (containers, volumes) run:
